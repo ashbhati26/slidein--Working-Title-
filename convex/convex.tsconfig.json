@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "paths": {
+      "@/*": ["../*"]
+    }
+  },
+  "include": [
+    "../convex/**/*.ts",
+    "../lib/**/*.ts",
+    "../types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}
