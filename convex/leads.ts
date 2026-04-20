@@ -9,7 +9,6 @@ import {
 import { internal } from "./_generated/api";
 import { DRIP_STOP_KEYWORDS, AI_SESSION_EXPIRY_MS } from "../lib/constants";
 
-
 /* Leads inbox — paginated list for the leads page */
 export const listLeads = query({
   args: {
@@ -20,12 +19,10 @@ export const listLeads = query({
         v.literal("qualified"),
         v.literal("converted"),
         v.literal("opted_out"),
-        v.literal("lost")
-      )
+        v.literal("lost"),
+      ),
     ),
-    channel: v.optional(
-      v.union(v.literal("instagram"), v.literal("whatsapp"))
-    ),
+    channel: v.optional(v.union(v.literal("instagram"), v.literal("whatsapp"))),
     automationId: v.optional(v.id("automations")),
     limit: v.optional(v.number()),
   },
@@ -48,7 +45,8 @@ export const listLeads = query({
 
     if (status) leads = leads.filter((l) => l.status === status);
     if (channel) leads = leads.filter((l) => l.channel === channel);
-    if (automationId) leads = leads.filter((l) => l.automationId === automationId);
+    if (automationId)
+      leads = leads.filter((l) => l.automationId === automationId);
 
     const sliced = leads.slice(0, limit ?? 50);
 
@@ -62,7 +60,7 @@ export const listLeads = query({
           .first();
 
         return { ...lead, lastMessage: lastMessage ?? null };
-      })
+      }),
     );
 
     return leadsWithMessages;
@@ -110,7 +108,7 @@ export const getLeadBySender = internalQuery({
     return ctx.db
       .query("leads")
       .withIndex("by_account_sender", (q) =>
-        q.eq("accountId", accountId).eq("senderId", senderId)
+        q.eq("accountId", accountId).eq("senderId", senderId),
       )
       .first();
   },
@@ -143,7 +141,7 @@ export const getUnreadLeadCount = query({
     const newLeads = await ctx.db
       .query("leads")
       .withIndex("by_account_status", (q) =>
-        q.eq("accountId", account._id).eq("status", "new")
+        q.eq("accountId", account._id).eq("status", "new"),
       )
       .filter((q) => q.gt(q.field("createdAt"), oneDayAgo))
       .collect();
@@ -151,7 +149,6 @@ export const getUnreadLeadCount = query({
     return newLeads.length;
   },
 });
-
 
 /*
   Internal — create or update a lead when a trigger fires.
@@ -179,7 +176,7 @@ export const upsertLead = internalMutation({
     const existing = await ctx.db
       .query("leads")
       .withIndex("by_account_sender", (q) =>
-        q.eq("accountId", args.accountId).eq("senderId", args.senderId)
+        q.eq("accountId", args.accountId).eq("senderId", args.senderId),
       )
       .first();
 
@@ -242,7 +239,7 @@ export const saveInboundMessage = internalMutation({
       const existing = await ctx.db
         .query("conversations")
         .withIndex("by_meta_message_id", (q) =>
-          q.eq("metaMessageId", args.metaMessageId)
+          q.eq("metaMessageId", args.metaMessageId),
         )
         .first();
       if (existing) return existing._id;
@@ -250,7 +247,7 @@ export const saveInboundMessage = internalMutation({
 
     /* Check for opt-out keywords */
     const isOptOut = DRIP_STOP_KEYWORDS.some((kw) =>
-      args.messageText.toLowerCase().includes(kw.toLowerCase())
+      args.messageText.toLowerCase().includes(kw.toLowerCase()),
     );
 
     const messageId = await ctx.db.insert("conversations", {
@@ -262,7 +259,7 @@ export const saveInboundMessage = internalMutation({
       deliveryStatus: "delivered",
       source: "inbound",
       metaMessageId: args.metaMessageId,
-      insideWindow: true, /* Inbound always opens/refreshes window */
+      insideWindow: true /* Inbound always opens/refreshes window */,
       archived: false,
       sentAt: args.sentAt,
       createdAt: now,
@@ -294,7 +291,7 @@ export const saveInboundMessage = internalMutation({
   },
 });
 
-/* Internal — save an outbound message (from SlideIN / AI / drip) */
+/* Internal — save an outbound message (from Svation / AI / drip) */
 export const saveOutboundMessage = internalMutation({
   args: {
     accountId: v.id("accounts"),
@@ -305,14 +302,19 @@ export const saveOutboundMessage = internalMutation({
       v.literal("trigger"),
       v.literal("ai"),
       v.literal("drip"),
-      v.literal("human")
+      v.literal("human"),
     ),
     metaMessageId: v.optional(v.string()),
     insideWindow: v.boolean(),
     aiTokensUsed: v.optional(v.number()),
     mediaUrl: v.optional(v.string()),
     mediaType: v.optional(
-      v.union(v.literal("image"), v.literal("pdf"), v.literal("audio"), v.literal("none"))
+      v.union(
+        v.literal("image"),
+        v.literal("pdf"),
+        v.literal("audio"),
+        v.literal("none"),
+      ),
     ),
   },
   handler: async (ctx, args) => {
@@ -401,7 +403,7 @@ export const updateLeadStatus = mutation({
       v.literal("qualified"),
       v.literal("converted"),
       v.literal("opted_out"),
-      v.literal("lost")
+      v.literal("lost"),
     ),
     collectedData: v.optional(
       v.object({
@@ -411,7 +413,7 @@ export const updateLeadStatus = mutation({
         requirement: v.optional(v.string()),
         timeline: v.optional(v.string()),
         notes: v.optional(v.string()),
-      })
+      }),
     ),
   },
   handler: async (ctx, { leadId, status, collectedData }) => {
@@ -446,9 +448,7 @@ export const expireAiSessions = internalMutation({
 
     const expiredLeads = await ctx.db
       .query("leads")
-      .withIndex("by_ai_activity", (q) =>
-        q.eq("aiSessionActive", true)
-      )
+      .withIndex("by_ai_activity", (q) => q.eq("aiSessionActive", true))
       .filter((q) => q.lt(q.field("aiLastActivityAt"), cutoff))
       .collect();
 
@@ -457,7 +457,7 @@ export const expireAiSessions = internalMutation({
       const messages = await ctx.db
         .query("conversations")
         .withIndex("by_lead_active", (q) =>
-          q.eq("leadId", lead._id).eq("archived", false)
+          q.eq("leadId", lead._id).eq("archived", false),
         )
         .collect();
 
@@ -486,8 +486,8 @@ export const closeExpiredWindows = internalMutation({
       .filter((q) =>
         q.and(
           q.eq(q.field("windowOpen"), true),
-          q.lt(q.field("lastInboundAt"), cutoff)
-        )
+          q.lt(q.field("lastInboundAt"), cutoff),
+        ),
       )
       .collect();
 
@@ -507,7 +507,7 @@ export const closeExpiredWindows = internalMutation({
 ═══════════════════════════════════════════════════════════ */
 export const sendManualReply = action({
   args: {
-    leadId:  v.id("leads"),
+    leadId: v.id("leads"),
     message: v.string(),
   },
   handler: async (ctx, { leadId, message }) => {
@@ -524,69 +524,81 @@ export const sendManualReply = action({
     if (!account) throw new Error("Account not found");
 
     /* Ownership check */
-    if (account.clerkUserId !== identity.subject) throw new Error("Not authorized");
+    if (account.clerkUserId !== identity.subject)
+      throw new Error("Not authorized");
 
     let metaMessageId: string | undefined;
 
     /* ── Send via Instagram ── */
     if (lead.channel === "instagram") {
       const accessToken = account.instagram?.accessToken;
-      const igUserId    = account.instagram?.igUserId;
+      const igUserId = account.instagram?.igUserId;
       if (!accessToken || !igUserId) throw new Error("Instagram not connected");
 
       const res = await fetch(
         `https://graph.instagram.com/v25.0/${igUserId}/messages`,
         {
-          method:  "POST",
+          method: "POST",
           headers: {
-            Authorization:  `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             recipient: { id: lead.senderId },
-            message:   { text: message },
+            message: { text: message },
           }),
         },
       );
-      const data = await res.json() as { message_id?: string; error?: { message: string } };
-      if (!res.ok) throw new Error(data.error?.message ?? "Failed to send Instagram DM");
+      const data = (await res.json()) as {
+        message_id?: string;
+        error?: { message: string };
+      };
+      if (!res.ok)
+        throw new Error(data.error?.message ?? "Failed to send Instagram DM");
       metaMessageId = data.message_id;
     }
 
     /* ── Send via WhatsApp ── */
     if (lead.channel === "whatsapp") {
-      const accessToken   = account.whatsapp?.accessToken;
+      const accessToken = account.whatsapp?.accessToken;
       const phoneNumberId = account.whatsapp?.phoneNumberId;
-      if (!accessToken || !phoneNumberId) throw new Error("WhatsApp not connected");
+      if (!accessToken || !phoneNumberId)
+        throw new Error("WhatsApp not connected");
 
       const res = await fetch(
         `https://graph.facebook.com/v21.0/${phoneNumberId}/messages`,
         {
-          method:  "POST",
+          method: "POST",
           headers: {
-            Authorization:  `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             messaging_product: "whatsapp",
-            to:   lead.senderId,
+            to: lead.senderId,
             type: "text",
             text: { body: message, preview_url: false },
           }),
         },
       );
-      const data = await res.json() as { messages?: Array<{ id: string }>; error?: { message: string } };
-      if (!res.ok) throw new Error(data.error?.message ?? "Failed to send WhatsApp message");
+      const data = (await res.json()) as {
+        messages?: Array<{ id: string }>;
+        error?: { message: string };
+      };
+      if (!res.ok)
+        throw new Error(
+          data.error?.message ?? "Failed to send WhatsApp message",
+        );
       metaMessageId = data.messages?.[0]?.id;
     }
 
     /* Save to conversation history */
     await ctx.runMutation(internal.leads.saveOutboundMessage, {
-      accountId:    lead.accountId,
-      leadId:       lead._id,
+      accountId: lead.accountId,
+      leadId: lead._id,
       automationId: lead.automationId,
-      messageText:  message,
-      source:       "human",
+      messageText: message,
+      source: "human",
       metaMessageId,
       insideWindow: lead.windowOpen,
     });

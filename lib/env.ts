@@ -10,8 +10,7 @@ export const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY ?? "";
 export const OPENAI_API_KEY = process.env.OPENAI_API_KEY ?? "";
 
 /* ─── Razorpay ────────────────────────────────────────────── */
-export const RAZORPAY_KEY_ID =
-  process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? "";
+export const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? "";
 export const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET ?? "";
 export const RAZORPAY_WEBHOOK_SECRET =
   process.env.RAZORPAY_WEBHOOK_SECRET ?? "";
@@ -22,14 +21,11 @@ export const RAZORPAY_PLAN_SMART_AI_ID =
 
 /* ─── Meta ────────────────────────────────────────────────── */
 export const META_APP_SECRET = process.env.META_APP_SECRET ?? "";
-export const WHATSAPP_VERIFY_TOKEN =
-  process.env.WHATSAPP_VERIFY_TOKEN ?? "";
-export const INSTAGRAM_VERIFY_TOKEN =
-  process.env.INSTAGRAM_VERIFY_TOKEN ?? "";
+export const WHATSAPP_VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN ?? "";
+export const INSTAGRAM_VERIFY_TOKEN = process.env.INSTAGRAM_VERIFY_TOKEN ?? "";
 
 /* ─── App ─────────────────────────────────────────────────── */
-export const APP_URL =
-  process.env.NEXT_PUBLIC_APP_URL ?? "https://slidein.app";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://Svation.app";
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
 export const IS_DEV = process.env.NODE_ENV === "development";
 

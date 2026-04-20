@@ -6,8 +6,8 @@ import { FadeUp, FadeIn } from "../_components/in-view";
 
 const FAQS = [
   {
-    q: "What is SlideIN?",
-    a: "SlideIN is a WhatsApp and Instagram automation platform built for Indian creators and business owners. Keyword triggers, AI conversations in Hinglish, drip follow-ups — zero coding required.",
+    q: "What is Svation?",
+    a: "Svation is a WhatsApp and Instagram automation platform built for Indian creators and business owners. Keyword triggers, AI conversations in Hinglish, drip follow-ups — zero coding required.",
   },
   {
     q: "Do I need any coding knowledge?",
@@ -15,7 +15,7 @@ const FAQS = [
   },
   {
     q: "How does WhatsApp automation work?",
-    a: "SlideIN connects to Meta's WhatsApp Cloud API directly — no third-party BSP. When a customer messages your number with your keyword, SlideIN replies instantly through your connected business number.",
+    a: "Svation connects to Meta's WhatsApp Cloud API directly — no third-party BSP. When a customer messages your number with your keyword, Svation replies instantly through your connected business number.",
   },
   {
     q: "What languages does Smart AI support?",
@@ -23,10 +23,10 @@ const FAQS = [
   },
   {
     q: "Will my Instagram account get banned?",
-    a: "SlideIN's Abuse Control auto-enforces a 200 DM/hr safe ceiling, deduplicates triggers, and detects spikes. We use official Meta APIs only — no scraping or unofficial tools.",
+    a: "Svation's Abuse Control auto-enforces a 200 DM/hr safe ceiling, deduplicates triggers, and detects spikes. We use official Meta APIs only — no scraping or unofficial tools.",
   },
   {
-    q: "Can SlideIN send payment links?",
+    q: "Can Svation send payment links?",
     a: "Yes. Paste your Razorpay link or UPI ID into your message. The AI shares it automatically when buying intent is detected. All payment processing goes directly between you and your customer.",
   },
   {
@@ -44,11 +44,15 @@ export function FAQ() {
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 56 }}>
           <FadeIn>
-            <p className="t-label" style={{ marginBottom: 16 }}>FAQ</p>
+            <p className="t-label" style={{ marginBottom: 16 }}>
+              FAQ
+            </p>
           </FadeIn>
           <FadeUp delay="d-1" style={{ maxWidth: 560, margin: "0 auto" }}>
             <h2 className="t-headline">Questions?</h2>
-            <h2 className="t-headline" style={{ color: "var(--ink-3)" }}>We have answers.</h2>
+            <h2 className="t-headline" style={{ color: "var(--ink-3)" }}>
+              We have answers.
+            </h2>
           </FadeUp>
         </div>
 
@@ -59,7 +63,9 @@ export function FAQ() {
               key={i}
               style={{
                 borderTop: "0.5px solid var(--rule)",
-                ...(i === FAQS.length - 1 ? { borderBottom: "0.5px solid var(--rule)" } : {}),
+                ...(i === FAQS.length - 1
+                  ? { borderBottom: "0.5px solid var(--rule)" }
+                  : {}),
               }}
             >
               <button
@@ -77,34 +83,51 @@ export function FAQ() {
                   gap: 20,
                 }}
               >
-                <span style={{
-                  fontSize: 17,
-                  fontWeight: 400,
-                  color: "var(--ink-1)",
-                  lineHeight: 1.35,
-                  letterSpacing: "-0.01em",
-                }}>
+                <span
+                  style={{
+                    fontSize: 17,
+                    fontWeight: 400,
+                    color: "var(--ink-1)",
+                    lineHeight: 1.35,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
                   {faq.q}
                 </span>
-                <div style={{
-                  width: 28, height: 28, borderRadius: "50%",
-                  background: open === i ? "var(--ink-1)" : "var(--bg-subtle)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0,
-                  color: open === i ? "var(--ink-inv)" : "var(--ink-3)",
-                  transition: "background 0.15s ease, color 0.15s ease",
-                }}>
+                <div
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: "50%",
+                    background:
+                      open === i ? "var(--ink-1)" : "var(--bg-subtle)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    color: open === i ? "var(--ink-inv)" : "var(--ink-3)",
+                    transition: "background 0.15s ease, color 0.15s ease",
+                  }}
+                >
                   {open === i ? <Minus size={12} /> : <Plus size={12} />}
                 </div>
               </button>
-              <div style={{
-                maxHeight: open === i ? 300 : 0,
-                overflow: "hidden",
-                transition: "max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-              }}>
+              <div
+                style={{
+                  maxHeight: open === i ? 300 : 0,
+                  overflow: "hidden",
+                  transition:
+                    "max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                }}
+              >
                 <p
                   className="t-body"
-                  style={{ fontSize: 15, paddingBottom: 20, lineHeight: 1.7, color: "var(--ink-2)" }}
+                  style={{
+                    fontSize: 15,
+                    paddingBottom: 20,
+                    lineHeight: 1.7,
+                    color: "var(--ink-2)",
+                  }}
                 >
                   {faq.a}
                 </p>

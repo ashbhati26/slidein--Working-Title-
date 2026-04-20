@@ -10,16 +10,16 @@ import { useAuthModal } from "../../components/providers/AuthModalProvider";
 import UserDropdown from "../_components/UserDropdown";
 
 const NAV_LINKS = [
-  { label: "Features",     href: "#features" },
+  { label: "Features", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
-  { label: "Pricing",      href: "#pricing" },
-  { label: "FAQ",          href: "#faq" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "FAQ", href: "#faq" },
 ];
 
 function AutoOpenModal() {
   const { openSignIn } = useAuthModal();
-  const searchParams   = useSearchParams();
-  const triggered      = useRef(false);
+  const searchParams = useSearchParams();
+  const triggered = useRef(false);
 
   useEffect(() => {
     if (triggered.current) return;
@@ -37,11 +37,13 @@ export function Navbar() {
 
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mounted,  setMounted]  = useState(false);
-  const { theme, setTheme }     = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
   const { openSignIn, openSignUp } = useAuthModal();
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 4);
@@ -57,9 +59,14 @@ export function Navbar() {
 
       <nav
         style={{
-          position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 100,
           height: 44,
-          display: "flex", alignItems: "center",
+          display: "flex",
+          alignItems: "center",
           transition: "background 0.3s ease, border-color 0.3s ease",
           background: scrolled
             ? "rgba(255,255,255,0.72)"
@@ -72,10 +79,21 @@ export function Navbar() {
       >
         <div
           className="container"
-          style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
         >
           {/* Logo */}
-          <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+          <Link
+            href="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+          >
             <span
               style={{
                 fontSize: 18,
@@ -85,12 +103,15 @@ export function Navbar() {
                 fontFamily: "var(--font-sans)",
               }}
             >
-              SlideIN
+              Svation
             </span>
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden md:flex" style={{ alignItems: "center", gap: 0 }}>
+          <div
+            className="hidden md:flex"
+            style={{ alignItems: "center", gap: 0 }}
+          >
             {NAV_LINKS.map((l) => (
               <a
                 key={l.href}
@@ -107,8 +128,12 @@ export function Navbar() {
                   display: "flex",
                   alignItems: "center",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink-1)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-2)")}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.color = "var(--ink-1)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.color = "var(--ink-2)")
+                }
               >
                 {l.label}
               </a>
@@ -116,20 +141,34 @@ export function Navbar() {
           </div>
 
           {/* Desktop right */}
-          <div className="hidden md:flex" style={{ alignItems: "center", gap: 8 }}>
+          <div
+            className="hidden md:flex"
+            style={{ alignItems: "center", gap: 8 }}
+          >
             {!isSignedIn ? (
               <>
                 <button
                   onClick={openSignIn}
                   style={{
-                    padding: "0 14px", fontSize: 12, fontWeight: 400,
-                    background: "transparent", border: "none", cursor: "pointer",
-                    color: "var(--ink-2)", height: 44, display: "flex", alignItems: "center",
+                    padding: "0 14px",
+                    fontSize: 12,
+                    fontWeight: 400,
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    color: "var(--ink-2)",
+                    height: 44,
+                    display: "flex",
+                    alignItems: "center",
                     transition: "color 0.15s ease",
                     letterSpacing: "-0.01em",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink-1)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-2)")}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "var(--ink-1)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "var(--ink-2)")
+                  }
                 >
                   Sign in
                 </button>
@@ -148,8 +187,12 @@ export function Navbar() {
                     transition: "background 0.15s ease",
                     letterSpacing: "-0.01em",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.background = "var(--accent-hover)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.background = "var(--accent)")}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = "var(--accent-hover)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = "var(--accent)")
+                  }
                 >
                   Get started
                 </button>
@@ -159,11 +202,19 @@ export function Navbar() {
                 <Link
                   href="/dashboard"
                   style={{
-                    height: 28, padding: "0 14px", fontSize: 12, fontWeight: 400,
-                    background: "var(--accent)", color: "#ffffff",
-                    border: "none", borderRadius: 980, cursor: "pointer",
-                    transition: "background 0.15s ease", letterSpacing: "-0.01em",
-                    display: "inline-flex", alignItems: "center",
+                    height: 28,
+                    padding: "0 14px",
+                    fontSize: 12,
+                    fontWeight: 400,
+                    background: "var(--accent)",
+                    color: "#ffffff",
+                    border: "none",
+                    borderRadius: 980,
+                    cursor: "pointer",
+                    transition: "background 0.15s ease",
+                    letterSpacing: "-0.01em",
+                    display: "inline-flex",
+                    alignItems: "center",
                   }}
                 >
                   Dashboard
@@ -174,14 +225,22 @@ export function Navbar() {
           </div>
 
           {/* Mobile */}
-          <div className="flex md:hidden" style={{ alignItems: "center", gap: 8 }}>
+          <div
+            className="flex md:hidden"
+            style={{ alignItems: "center", gap: 8 }}
+          >
             <button
               onClick={() => setMenuOpen(!menuOpen)}
               style={{
-                width: 28, height: 28,
-                background: "none", border: "none", cursor: "pointer",
+                width: 28,
+                height: 28,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
                 color: "var(--ink-1)",
-                display: "flex", alignItems: "center", justifyContent: "center",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               {menuOpen ? <X size={16} /> : <Menu size={16} />}
@@ -194,19 +253,29 @@ export function Navbar() {
       <div
         className="md:hidden"
         style={{
-          position: "fixed", inset: 0, zIndex: 99,
+          position: "fixed",
+          inset: 0,
+          zIndex: 99,
           pointerEvents: menuOpen ? "auto" : "none",
           opacity: menuOpen ? 1 : 0,
           transition: "opacity 0.2s ease",
         }}
       >
         <div
-          style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,.2)", backdropFilter: "blur(8px)" }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(0,0,0,.2)",
+            backdropFilter: "blur(8px)",
+          }}
           onClick={() => setMenuOpen(false)}
         />
         <div
           style={{
-            position: "absolute", top: 44, left: 0, right: 0,
+            position: "absolute",
+            top: 44,
+            left: 0,
+            right: 0,
             background: "rgba(255,255,255,0.9)",
             backdropFilter: "saturate(180%) blur(20px)",
             WebkitBackdropFilter: "saturate(180%) blur(20px)",
@@ -234,22 +303,39 @@ export function Navbar() {
           ))}
           <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
             <button
-              onClick={() => { setMenuOpen(false); openSignIn(); }}
+              onClick={() => {
+                setMenuOpen(false);
+                openSignIn();
+              }}
               style={{
-                flex: 1, height: 44, borderRadius: 980,
+                flex: 1,
+                height: 44,
+                borderRadius: 980,
                 border: "1px solid var(--rule-md)",
-                background: "transparent", fontSize: 15, fontWeight: 400,
-                color: "var(--ink-1)", cursor: "pointer",
+                background: "transparent",
+                fontSize: 15,
+                fontWeight: 400,
+                color: "var(--ink-1)",
+                cursor: "pointer",
               }}
             >
               Sign in
             </button>
             <button
-              onClick={() => { setMenuOpen(false); openSignUp(); }}
+              onClick={() => {
+                setMenuOpen(false);
+                openSignUp();
+              }}
               style={{
-                flex: 1, height: 44, borderRadius: 980,
-                background: "var(--accent)", color: "#ffffff",
-                border: "none", fontSize: 15, fontWeight: 400, cursor: "pointer",
+                flex: 1,
+                height: 44,
+                borderRadius: 980,
+                background: "var(--accent)",
+                color: "#ffffff",
+                border: "none",
+                fontSize: 15,
+                fontWeight: 400,
+                cursor: "pointer",
               }}
             >
               Get started

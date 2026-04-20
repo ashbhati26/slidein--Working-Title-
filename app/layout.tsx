@@ -13,11 +13,11 @@ import AuthModal from "./(root)/_components/AuthModal";
 /* ─── Metadata ─────────────────────────────────────────── */
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://slidein.app",
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://Svation.app",
   ),
   title: {
-    default: "SlideIN — WhatsApp & Instagram Automation for India",
-    template: "%s — SlideIN",
+    default: "Svation — WhatsApp & Instagram Automation for India",
+    template: "%s — Svation",
   },
   description:
     "Automate your WhatsApp and Instagram DMs with AI. Built for Indian creators, coaches, and business owners. Setup in under 2 minutes.",
@@ -30,15 +30,15 @@ export const metadata: Metadata = {
     "Instagram comment automation",
     "WhatsApp drip sequence",
   ],
-  authors: [{ name: "SlideIN" }],
-  creator: "SlideIN",
+  authors: [{ name: "Svation" }],
+  creator: "Svation",
 
   /* PWA */
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "SlideIN",
+    title: "Svation",
     startupImage: [
       {
         url: "/icons/splash-2048x2732.png",
@@ -67,9 +67,9 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://slidein.app",
-    siteName: "SlideIN",
-    title: "SlideIN — WhatsApp & Instagram Automation for India",
+    url: "https://Svation.app",
+    siteName: "Svation",
+    title: "Svation — WhatsApp & Instagram Automation for India",
     description:
       "Automate your DMs with AI. Built for Indian creators and business owners.",
     images: [
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "SlideIN — WhatsApp & Instagram Automation",
+        alt: "Svation — WhatsApp & Instagram Automation",
       },
     ],
   },
@@ -85,7 +85,7 @@ export const metadata: Metadata = {
   /* Twitter */
   twitter: {
     card: "summary_large_image",
-    title: "SlideIN — WhatsApp & Instagram Automation for India",
+    title: "Svation — WhatsApp & Instagram Automation for India",
     description: "Automate your DMs with AI. Built for Indian creators.",
     images: ["/og-image.png"],
   },

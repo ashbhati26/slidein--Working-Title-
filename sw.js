@@ -1,11 +1,11 @@
 /*
-  SlideIN Service Worker
+  Svation Service Worker
   Handles: offline cache, push notifications for new leads
   Strategy: Network-first for API/dynamic, Cache-first for static assets
 */
 
-const CACHE_NAME = "slidein-v1";
-const STATIC_CACHE_NAME = "slidein-static-v1";
+const CACHE_NAME = "Svation-v1";
+const STATIC_CACHE_NAME = "Svation-static-v1";
 
 /* Assets to pre-cache on install */
 const STATIC_ASSETS = [
@@ -17,12 +17,7 @@ const STATIC_ASSETS = [
 ];
 
 /* Routes that should never be cached */
-const NEVER_CACHE = [
-  "/api/",
-  "convex.cloud",
-  "clerk.com",
-  "googleapis.com",
-];
+const NEVER_CACHE = ["/api/", "convex.cloud", "clerk.com", "googleapis.com"];
 
 /* ─── Install ─────────────────────────────────────────── */
 self.addEventListener("install", (event) => {
@@ -30,7 +25,7 @@ self.addEventListener("install", (event) => {
     caches
       .open(STATIC_CACHE_NAME)
       .then((cache) => cache.addAll(STATIC_ASSETS))
-      .then(() => self.skipWaiting())
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -43,10 +38,10 @@ self.addEventListener("activate", (event) => {
         Promise.all(
           keys
             .filter((k) => k !== CACHE_NAME && k !== STATIC_CACHE_NAME)
-            .map((k) => caches.delete(k))
-        )
+            .map((k) => caches.delete(k)),
+        ),
       )
-      .then(() => self.clients.claim())
+      .then(() => self.clients.claim()),
   );
 });
 
@@ -93,7 +88,7 @@ self.addEventListener("fetch", (event) => {
             statusText: "Service Unavailable",
           });
         });
-      })
+      }),
   );
 });
 
@@ -106,7 +101,7 @@ self.addEventListener("push", (event) => {
     data = event.data.json();
   } catch {
     data = {
-      title: "New lead — SlideIN",
+      title: "New lead — Svation",
       body: event.data.text(),
       icon: "/icons/icon-192x192.png",
       badge: "/icons/badge-72x72.png",
@@ -117,7 +112,7 @@ self.addEventListener("push", (event) => {
     body: data.body || "You have a new lead",
     icon: data.icon || "/icons/icon-192x192.png",
     badge: data.badge || "/icons/badge-72x72.png",
-    tag: data.tag || "slidein-lead",
+    tag: data.tag || "Svation-lead",
     renotify: true,
     requireInteraction: false,
     silent: false,
@@ -138,7 +133,10 @@ self.addEventListener("push", (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification(data.title || "New lead — SlideIN", options)
+    self.registration.showNotification(
+      data.title || "New lead — Svation",
+      options,
+    ),
   );
 });
 
@@ -160,7 +158,7 @@ self.addEventListener("notificationclick", (event) => {
 
         /* Otherwise open new tab */
         return self.clients.openWindow(targetUrl);
-      })
+      }),
   );
 });
 
@@ -169,7 +167,7 @@ self.addEventListener("sync", (event) => {
   if (event.tag === "retry-failed-messages") {
     event.waitUntil(
       /* This will be handled by the app when it comes back online */
-      Promise.resolve()
+      Promise.resolve(),
     );
   }
 });

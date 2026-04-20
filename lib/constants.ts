@@ -1,5 +1,5 @@
-export const APP_NAME = "SlideIN";
-export const APP_URL = "https://slidein.app";
+export const APP_NAME = "Svation";
+export const APP_URL = "https://Svation.app";
 export const SUPPORT_WHATSAPP = "https://wa.me/919999999999";
 
 /* ─── Plan pricing ────────────────────────────────────────── */
@@ -9,7 +9,7 @@ export const PLAN_PRICES = {
   smart_ai: 2499,
 } as const;
 
-export const ANNUAL_DISCOUNT = 0.20;
+export const ANNUAL_DISCOUNT = 0.2;
 
 /* ─── Free plan limits ────────────────────────────────────── */
 export const FREE_AUTOMATION_LIMIT = 5;
@@ -40,7 +40,8 @@ export const WA_INITIAL_DAILY_LIMIT = 250;
 
 /* ─── Smart AI session ────────────────────────────────────── */
 export const AI_SESSION_EXPIRY_DAYS = 30;
-export const AI_SESSION_EXPIRY_MS = AI_SESSION_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
+export const AI_SESSION_EXPIRY_MS =
+  AI_SESSION_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
 export const AI_MAX_HISTORY_MESSAGES = 50;
 export const AI_MAX_TOKENS = 1024;
 export const AI_TEMPERATURE = 0.7;
@@ -58,41 +59,49 @@ export const DRIP_STOP_KEYWORDS = [
 
 /* ─── Referral rewards ────────────────────────────────────── */
 export const REFERRAL_REWARDS = [
-  { referrals: 1,  freeMonths: 1,  commission: 0 },
-  { referrals: 3,  freeMonths: 3,  commission: 0 },
-  { referrals: 5,  freeMonths: 6,  commission: 0 },
-  { referrals: 10, freeMonths: 0,  commission: 0.30 },
+  { referrals: 1, freeMonths: 1, commission: 0 },
+  { referrals: 3, freeMonths: 3, commission: 0 },
+  { referrals: 5, freeMonths: 6, commission: 0 },
+  { referrals: 10, freeMonths: 0, commission: 0.3 },
 ] as const;
 
 /* ─── Supported languages ─────────────────────────────────── */
 export const AI_LANGUAGES = [
-  { value: "hinglish", label: "Hinglish", description: "Hindi + English mix (recommended)" },
-  { value: "hindi",    label: "Hindi",    description: "Pure Hindi — Devanagari script" },
-  { value: "english",  label: "English",  description: "Standard English" },
-  { value: "tamil",    label: "Tamil",    description: "Tamil script" },
-  { value: "telugu",   label: "Telugu",   description: "Telugu script" },
-  { value: "marathi",  label: "Marathi",  description: "Marathi script" },
+  {
+    value: "hinglish",
+    label: "Hinglish",
+    description: "Hindi + English mix (recommended)",
+  },
+  {
+    value: "hindi",
+    label: "Hindi",
+    description: "Pure Hindi — Devanagari script",
+  },
+  { value: "english", label: "English", description: "Standard English" },
+  { value: "tamil", label: "Tamil", description: "Tamil script" },
+  { value: "telugu", label: "Telugu", description: "Telugu script" },
+  { value: "marathi", label: "Marathi", description: "Marathi script" },
 ] as const;
 
 export type AILanguage = (typeof AI_LANGUAGES)[number]["value"];
 
 /* ─── Template IDs ────────────────────────────────────────── */
 export const TEMPLATE_IDS = {
-  FITNESS:     "fitness_coach",
-  COURSE:      "course_creator",
+  FITNESS: "fitness_coach",
+  COURSE: "course_creator",
   REAL_ESTATE: "real_estate",
-  SELLER:      "instagram_seller",
-  SALON:       "beauty_salon",
-  FINANCE:     "finance_advisor",
+  SELLER: "instagram_seller",
+  SALON: "beauty_salon",
+  FINANCE: "finance_advisor",
 } as const;
 
 /* ─── Navigation ──────────────────────────────────────────── */
 export const NAV_ITEMS = [
-  { href: "/dashboard",   label: "Dashboard",   icon: "LayoutDashboard" },
+  { href: "/dashboard", label: "Dashboard", icon: "LayoutDashboard" },
   { href: "/automations", label: "Automations", icon: "Zap" },
-  { href: "/leads",       label: "Leads",       icon: "Users" },
-  { href: "/analytics",   label: "Analytics",   icon: "BarChart2" },
-  { href: "/settings",    label: "Settings",    icon: "Settings" },
+  { href: "/leads", label: "Leads", icon: "Users" },
+  { href: "/analytics", label: "Analytics", icon: "BarChart2" },
+  { href: "/settings", label: "Settings", icon: "Settings" },
 ] as const;
 
 /* ─── Meta API ────────────────────────────────────────────── */
@@ -114,9 +123,11 @@ export const IG_VERIFY_TOKEN =
 export const ERRORS = {
   AUTOMATION_LIMIT: `You've reached the ${FREE_AUTOMATION_LIMIT} automation limit on the free plan. Upgrade to Creator for unlimited automations.`,
   LEAD_LIMIT: `You've reached ${FREE_LEAD_PERIOD_LIMIT} leads this month. Upgrade to Creator for unlimited contacts.`,
-  WHATSAPP_NOT_CONNECTED: "Connect your WhatsApp number first to use this feature.",
+  WHATSAPP_NOT_CONNECTED:
+    "Connect your WhatsApp number first to use this feature.",
   INSTAGRAM_NOT_CONNECTED: "Connect your Instagram account first.",
-  SMART_AI_PLAN_REQUIRED: "Smart AI is available on the Smart AI plan. Upgrade to enable it.",
+  SMART_AI_PLAN_REQUIRED:
+    "Smart AI is available on the Smart AI plan. Upgrade to enable it.",
   CREATOR_PLAN_REQUIRED: "This feature requires the Creator plan or above.",
   GENERIC: "Something went wrong. Please try again.",
 } as const;

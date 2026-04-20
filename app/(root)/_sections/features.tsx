@@ -1,15 +1,13 @@
 "use client";
 
-import {
-  MessageCircle, Bot, Timer, Shield, Globe2, Zap,
-} from "lucide-react";
+import { MessageCircle, Bot, Timer, Shield, Globe2, Zap } from "lucide-react";
 import { FadeUp, FadeIn, AnimLine } from "../_components/in-view";
 
 const FEATURES = [
   {
     icon: MessageCircle,
     title: "Instagram comment to DM",
-    desc: "Someone comments 'PRICE' on your reel. SlideIN fires a DM instantly. 400 comments means 400 DMs, zero effort from you.",
+    desc: "Someone comments 'PRICE' on your reel. Svation fires a DM instantly. 400 comments means 400 DMs, zero effort from you.",
     detail: ["Keyword detection", "Instant delivery", "Works 24/7"],
   },
   {
@@ -46,38 +44,36 @@ const FEATURES = [
 
 export function Features() {
   return (
-    <section
-      id="features"
-      style={{ background: "var(--bg-subtle)" }}
-    >
+    <section id="features" style={{ background: "var(--bg-subtle)" }}>
       {/* Section intro — full-width centered like Apple product page */}
       <div
         className="container"
         style={{ paddingTop: 80, paddingBottom: 0, textAlign: "center" }}
       >
         <FadeIn>
-          <p className="t-label" style={{ marginBottom: 16 }}>Features</p>
+          <p className="t-label" style={{ marginBottom: 16 }}>
+            Features
+          </p>
         </FadeIn>
         <FadeUp delay="d-1" style={{ maxWidth: 640, margin: "0 auto" }}>
-          <h2 className="t-headline">
-            Everything you need.
-          </h2>
+          <h2 className="t-headline">Everything you need.</h2>
           <h2 className="t-headline" style={{ color: "var(--ink-3)" }}>
             Nothing you don't.
           </h2>
         </FadeUp>
-        <FadeUp delay="d-2" style={{ marginTop: 20, maxWidth: 480, margin: "20px auto 0" }}>
+        <FadeUp
+          delay="d-2"
+          style={{ marginTop: 20, maxWidth: 480, margin: "20px auto 0" }}
+        >
           <p className="t-subhead" style={{ fontSize: 19 }}>
-            Built for how Indian creators and business owners actually communicate.
+            Built for how Indian creators and business owners actually
+            communicate.
           </p>
         </FadeUp>
       </div>
 
       {/* Feature grid — Apple card grid */}
-      <div
-        className="container"
-        style={{ paddingTop: 52, paddingBottom: 80 }}
-      >
+      <div className="container" style={{ paddingTop: 52, paddingBottom: 80 }}>
         <div
           style={{
             display: "grid",
@@ -91,7 +87,7 @@ export function Features() {
             return (
               <FadeUp
                 key={f.title}
-                delay={`d-${(i % 3)}` as any}
+                delay={`d-${i % 3}` as any}
                 style={{
                   background: "var(--bg)",
                   borderRadius: 18,
@@ -137,7 +133,9 @@ export function Features() {
                   {f.desc}
                 </p>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div
+                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                >
                   {f.detail.map((d) => (
                     <div
                       key={d}
@@ -151,7 +149,9 @@ export function Features() {
                     >
                       <span
                         style={{
-                          width: 4, height: 4, borderRadius: "50%",
+                          width: 4,
+                          height: 4,
+                          borderRadius: "50%",
                           background: "var(--accent)",
                           flexShrink: 0,
                           opacity: 0.6,

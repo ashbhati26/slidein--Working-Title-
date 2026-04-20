@@ -9,16 +9,19 @@ import { Loader2 } from "lucide-react";
 import { SettingsCard, labelSt, inputSt } from "./settings-card";
 
 export function ProfileSection() {
-  const { user }      = useUser();
-  const account       = useQuery(api.accounts.getMyAccount);
+  const { user } = useUser();
+  const account = useQuery(api.accounts.getMyAccount);
   const updateProfile = useMutation(api.accounts.updateProfile);
 
-  const [name,    setName]    = useState("");
-  const [saving,  setSaving]  = useState(false);
+  const [name, setName] = useState("");
+  const [saving, setSaving] = useState(false);
   const [changed, setChanged] = useState(false);
 
   useEffect(() => {
-    if (account?.name) { setName(account.name); setChanged(false); }
+    if (account?.name) {
+      setName(account.name);
+      setChanged(false);
+    }
   }, [account?.name]);
 
   async function handleSave() {
@@ -28,28 +31,74 @@ export function ProfileSection() {
       await updateProfile({ name: name.trim() });
       toast.success("Profile updated.");
       setChanged(false);
-    } catch { toast.error("Failed to save. Please try again."); }
-    finally  { setSaving(false); }
+    } catch {
+      toast.error("Failed to save. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   const loading = account === undefined;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-
       {/* Profile */}
-      <SettingsCard title="Profile" description="Your name shown inside SlideIN.">
+      <SettingsCard
+        title="Profile"
+        description="Your name shown inside Svation."
+      >
         {/* Avatar row */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+            marginBottom: 20,
+          }}
+        >
           {user?.imageUrl ? (
-            <img src={user.imageUrl} alt={name} style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", border: "0.5px solid var(--rule-md)", flexShrink: 0 }} />
+            <img
+              src={user.imageUrl}
+              alt={name}
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: "50%",
+                objectFit: "cover",
+                border: "0.5px solid var(--rule-md)",
+                flexShrink: 0,
+              }}
+            />
           ) : (
-            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "var(--accent-muted)", border: "0.5px solid var(--accent-border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 600, color: "var(--accent)", flexShrink: 0 }}>
+            <div
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: "50%",
+                background: "var(--accent-muted)",
+                border: "0.5px solid var(--accent-border)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 18,
+                fontWeight: 600,
+                color: "var(--accent)",
+                flexShrink: 0,
+              }}
+            >
               {name?.[0]?.toUpperCase() ?? "?"}
             </div>
           )}
           <div>
-            <p style={{ fontSize: 14, fontWeight: 500, color: "var(--ink-1)", marginBottom: 2, letterSpacing: "-0.01em" }}>
+            <p
+              style={{
+                fontSize: 14,
+                fontWeight: 500,
+                color: "var(--ink-1)",
+                marginBottom: 2,
+                letterSpacing: "-0.01em",
+              }}
+            >
               {loading ? "—" : name || "—"}
             </p>
             <p style={{ fontSize: 12, color: "var(--ink-3)" }}>
@@ -63,12 +112,19 @@ export function ProfileSection() {
           <label style={labelSt}>Display name</label>
           <input
             value={name}
-            onChange={(e) => { setName(e.target.value); setChanged(true); }}
+            onChange={(e) => {
+              setName(e.target.value);
+              setChanged(true);
+            }}
             placeholder="Your name"
             disabled={loading}
             style={inputSt}
-            onFocus={(e) => (e.currentTarget.style.borderColor = "var(--accent)")}
-            onBlur={(e)  => (e.currentTarget.style.borderColor = "var(--rule-md)")}
+            onFocus={(e) =>
+              (e.currentTarget.style.borderColor = "var(--accent)")
+            }
+            onBlur={(e) =>
+              (e.currentTarget.style.borderColor = "var(--rule-md)")
+            }
           />
         </div>
 
@@ -80,48 +136,92 @@ export function ProfileSection() {
             disabled
             style={{ ...inputSt, opacity: 0.5, cursor: "not-allowed" }}
           />
-          <p style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4 }}>Managed by your sign-in provider.</p>
+          <p style={{ fontSize: 11, color: "var(--ink-3)", marginTop: 4 }}>
+            Managed by your sign-in provider.
+          </p>
         </div>
 
         <button
           onClick={handleSave}
           disabled={!changed || saving || !name.trim()}
           style={{
-            height: 32, padding: "0 16px", fontSize: 12, borderRadius: 980,
-            background: changed && name.trim() ? "var(--accent)" : "var(--bg-subtle)",
-            color:      changed && name.trim() ? "#fff" : "var(--ink-3)",
-            border:     changed && name.trim() ? "none" : "0.5px solid var(--rule-md)",
-            cursor:     changed && name.trim() ? "pointer" : "not-allowed",
-            display: "inline-flex", alignItems: "center", gap: 5,
+            height: 32,
+            padding: "0 16px",
+            fontSize: 12,
+            borderRadius: 980,
+            background:
+              changed && name.trim() ? "var(--accent)" : "var(--bg-subtle)",
+            color: changed && name.trim() ? "#fff" : "var(--ink-3)",
+            border:
+              changed && name.trim() ? "none" : "0.5px solid var(--rule-md)",
+            cursor: changed && name.trim() ? "pointer" : "not-allowed",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 5,
             transition: "all 0.15s ease",
           }}
         >
-          {saving && <Loader2 size={12} style={{ animation: "spin .7s linear infinite" }} />}
+          {saving && (
+            <Loader2
+              size={12}
+              style={{ animation: "spin .7s linear infinite" }}
+            />
+          )}
           {saving ? "Saving…" : "Save changes"}
         </button>
       </SettingsCard>
 
       {/* Plan summary */}
       {account && (
-        <SettingsCard title="Your plan" description="Current SlideIN subscription.">
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <SettingsCard
+          title="Your plan"
+          description="Current Svation subscription."
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <div>
-              <p style={{ fontSize: 15, fontWeight: 600, color: "var(--ink-1)", letterSpacing: "-0.025em", marginBottom: 2, textTransform: "capitalize" }}>
+              <p
+                style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+                  color: "var(--ink-1)",
+                  letterSpacing: "-0.025em",
+                  marginBottom: 2,
+                  textTransform: "capitalize",
+                }}
+              >
                 {account.plan.replace("_", " ")} plan
               </p>
               <p style={{ fontSize: 12, color: "var(--ink-3)" }}>
-                {account.plan === "starter" ? "Free forever" :
-                 account.plan === "creator" ? "₹999 / month" : "₹2,499 / month"}
+                {account.plan === "starter"
+                  ? "Free forever"
+                  : account.plan === "creator"
+                    ? "₹999 / month"
+                    : "₹2,499 / month"}
               </p>
             </div>
             {account.plan === "starter" && (
-              <a href="/settings?tab=billing" style={{
-                height: 30, padding: "0 14px", borderRadius: 980, fontSize: 12,
-                color: "var(--accent)", background: "var(--accent-muted)",
-                border: "0.5px solid var(--accent-border)",
-                display: "inline-flex", alignItems: "center",
-                textDecoration: "none", letterSpacing: "-0.005em",
-              }}>
+              <a
+                href="/settings?tab=billing"
+                style={{
+                  height: 30,
+                  padding: "0 14px",
+                  borderRadius: 980,
+                  fontSize: 12,
+                  color: "var(--accent)",
+                  background: "var(--accent-muted)",
+                  border: "0.5px solid var(--accent-border)",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  textDecoration: "none",
+                  letterSpacing: "-0.005em",
+                }}
+              >
                 Upgrade
               </a>
             )}
@@ -131,27 +231,47 @@ export function ProfileSection() {
 
       {/* Referral */}
       {account?.referralCode && (
-        <SettingsCard title="Referral link" description="Earn 1 free month per paid referral. 10+ = 30% recurring commission.">
+        <SettingsCard
+          title="Referral link"
+          description="Earn 1 free month per paid referral. 10+ = 30% recurring commission."
+        >
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <div style={{
-              flex: 1, padding: "8px 12px", borderRadius: 8,
-              border: "0.5px solid var(--rule-md)", background: "var(--bg-subtle)",
-              fontSize: 12, color: "var(--ink-2)", letterSpacing: "-0.005em",
-              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-            }}>
+            <div
+              style={{
+                flex: 1,
+                padding: "8px 12px",
+                borderRadius: 8,
+                border: "0.5px solid var(--rule-md)",
+                background: "var(--bg-subtle)",
+                fontSize: 12,
+                color: "var(--ink-2)",
+                letterSpacing: "-0.005em",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {typeof window !== "undefined"
                 ? `${window.location.origin}/?ref=${account.referralCode}`
                 : `/?ref=${account.referralCode}`}
             </div>
             <button
               onClick={() => {
-                navigator.clipboard.writeText(`${window.location.origin}/?ref=${account.referralCode}`);
+                navigator.clipboard.writeText(
+                  `${window.location.origin}/?ref=${account.referralCode}`,
+                );
                 toast.success("Referral link copied!");
               }}
               style={{
-                height: 32, padding: "0 12px", fontSize: 12, borderRadius: 8,
-                color: "var(--ink-2)", background: "var(--bg-subtle)",
-                border: "0.5px solid var(--rule-md)", cursor: "pointer", flexShrink: 0,
+                height: 32,
+                padding: "0 12px",
+                fontSize: 12,
+                borderRadius: 8,
+                color: "var(--ink-2)",
+                background: "var(--bg-subtle)",
+                border: "0.5px solid var(--rule-md)",
+                cursor: "pointer",
+                flexShrink: 0,
               }}
             >
               Copy

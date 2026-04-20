@@ -121,7 +121,7 @@ export function Sidebar() {
               fontFamily: "var(--font-sans)",
             }}
           >
-            SlideIN
+            Svation
           </span>
         </Link>
       </div>

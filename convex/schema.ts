@@ -2,7 +2,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 /*
-  SlideIN — Convex Schema v2
+  Svation — Convex Schema v2
   ─────────────────────────────────────────────────────────────
   Instagram connection uses the NEW Instagram Login API (July 2024+)
   No Facebook Page required. No pageId. Just accessToken + igUserId.
@@ -18,9 +18,9 @@ export default defineSchema({
     avatarUrl: v.optional(v.string()),
 
     plan: v.union(
-      v.literal("starter"),   /* Free — 5 automations, 500 leads/30d  */
-      v.literal("creator"),   /* Rs. 999/mo — unlimited               */
-      v.literal("smart_ai"),  /* Rs. 2,499/mo — unlimited + AI        */
+      v.literal("starter") /* Free — 5 automations, 500 leads/30d  */,
+      v.literal("creator") /* Rs. 999/mo — unlimited               */,
+      v.literal("smart_ai") /* Rs. 2,499/mo — unlimited + AI        */,
     ),
 
     /* Rolling 30-day window — resets from account creation date */
@@ -37,33 +37,37 @@ export default defineSchema({
         v.literal("paused"),
         v.literal("cancelled"),
         v.literal("past_due"),
-      )
+      ),
     ),
     subscriptionCurrentPeriodEnd: v.optional(v.number()),
 
     /* ── Instagram connection (Instagram Login API — no FB Page needed) ── */
-    instagram: v.optional(v.object({
-      connectedAt:     v.number(),
-      igUserId:        v.string(),   // IG professional account ID
-      igUsername:      v.string(),
-      igProfilePicUrl: v.optional(v.string()),
-      accessToken:     v.string(),   // Long-lived IG user token (60 days)
-      tokenExpiresAt:  v.number(),   // Unix ms — refresh before this
-    })),
+    instagram: v.optional(
+      v.object({
+        connectedAt: v.number(),
+        igUserId: v.string(), // IG professional account ID
+        igUsername: v.string(),
+        igProfilePicUrl: v.optional(v.string()),
+        accessToken: v.string(), // Long-lived IG user token (60 days)
+        tokenExpiresAt: v.number(), // Unix ms — refresh before this
+      }),
+    ),
 
     /* ── WhatsApp connection ─────────────────────────────── */
-    whatsapp: v.optional(v.object({
-      connectedAt: v.number(),
-      phoneNumberId: v.string(),
-      displayPhoneNumber: v.string(),
-      wabaId: v.string(),
-      accessToken: v.string(),
-      verifiedName: v.optional(v.string()),
-      qualityRating: v.optional(
-        v.union(v.literal("GREEN"), v.literal("YELLOW"), v.literal("RED"))
-      ),
-      messagingLimit: v.optional(v.number()),
-    })),
+    whatsapp: v.optional(
+      v.object({
+        connectedAt: v.number(),
+        phoneNumberId: v.string(),
+        displayPhoneNumber: v.string(),
+        wabaId: v.string(),
+        accessToken: v.string(),
+        verifiedName: v.optional(v.string()),
+        qualityRating: v.optional(
+          v.union(v.literal("GREEN"), v.literal("YELLOW"), v.literal("RED")),
+        ),
+        messagingLimit: v.optional(v.number()),
+      }),
+    ),
 
     /* ── Referral ─────────────────────────────────────────── */
     referralCode: v.string(),
@@ -79,7 +83,6 @@ export default defineSchema({
     .index("by_razorpay_customer", ["razorpayCustomerId"])
     .index("by_instagram_user", ["instagram.igUserId"]),
 
-
   /* ═══════════════════════════════════════════════════════════
      AUTOMATIONS
   ═══════════════════════════════════════════════════════════ */
@@ -91,10 +94,7 @@ export default defineSchema({
       v.literal("paused"),
       v.literal("draft"),
     ),
-    channel: v.union(
-      v.literal("instagram"),
-      v.literal("whatsapp"),
-    ),
+    channel: v.union(v.literal("instagram"), v.literal("whatsapp")),
     trigger: v.object({
       type: v.union(
         v.literal("ig_comment"),
@@ -113,57 +113,68 @@ export default defineSchema({
       activeHoursEnd: v.optional(v.string()),
     }),
     listener: v.object({
-      type: v.union(
-        v.literal("fixed_message"),
-        v.literal("smart_ai"),
+      type: v.union(v.literal("fixed_message"), v.literal("smart_ai")),
+      message: v.optional(
+        v.object({
+          text: v.optional(v.string()),
+          mediaUrl: v.optional(v.string()),
+          mediaType: v.optional(
+            v.union(v.literal("image"), v.literal("pdf"), v.literal("none")),
+          ),
+          igPublicReply: v.optional(v.string()),
+          buttons: v.optional(
+            v.array(
+              v.object({
+                id: v.string(),
+                title: v.string(),
+              }),
+            ),
+          ),
+        }),
       ),
-      message: v.optional(v.object({
-        text: v.optional(v.string()),
-        mediaUrl: v.optional(v.string()),
-        mediaType: v.optional(
-          v.union(v.literal("image"), v.literal("pdf"), v.literal("none"))
-        ),
-        igPublicReply: v.optional(v.string()),
-        buttons: v.optional(v.array(v.object({
-          id: v.string(),
-          title: v.string(),
-        }))),
-      })),
-      aiConfig: v.optional(v.object({
-        language: v.union(
-          v.literal("english"),
-          v.literal("hindi"),
-          v.literal("hinglish"),
-          v.literal("tamil"),
-          v.literal("telugu"),
-          v.literal("marathi"),
-        ),
-        tone: v.string(),
-        businessDescription: v.string(),
-        faqs: v.array(v.object({
-          question: v.string(),
-          answer: v.string(),
-        })),
-        paymentLink: v.optional(v.string()),
-        discountInstruction: v.optional(v.string()),
-        escalationPhrase: v.optional(v.string()),
-        customSystemPrompt: v.optional(v.string()),
-      })),
+      aiConfig: v.optional(
+        v.object({
+          language: v.union(
+            v.literal("english"),
+            v.literal("hindi"),
+            v.literal("hinglish"),
+            v.literal("tamil"),
+            v.literal("telugu"),
+            v.literal("marathi"),
+          ),
+          tone: v.string(),
+          businessDescription: v.string(),
+          faqs: v.array(
+            v.object({
+              question: v.string(),
+              answer: v.string(),
+            }),
+          ),
+          paymentLink: v.optional(v.string()),
+          discountInstruction: v.optional(v.string()),
+          escalationPhrase: v.optional(v.string()),
+          customSystemPrompt: v.optional(v.string()),
+        }),
+      ),
     }),
-    drip: v.optional(v.object({
-      enabled: v.boolean(),
-      steps: v.array(v.object({
-        stepNumber: v.number(),
-        delayHours: v.number(),
-        message: v.string(),
-        mediaUrl: v.optional(v.string()),
-        mediaType: v.optional(
-          v.union(v.literal("image"), v.literal("pdf"), v.literal("none"))
+    drip: v.optional(
+      v.object({
+        enabled: v.boolean(),
+        steps: v.array(
+          v.object({
+            stepNumber: v.number(),
+            delayHours: v.number(),
+            message: v.string(),
+            mediaUrl: v.optional(v.string()),
+            mediaType: v.optional(
+              v.union(v.literal("image"), v.literal("pdf"), v.literal("none")),
+            ),
+          }),
         ),
-      })),
-      stopOnReply: v.boolean(),
-      stopKeywords: v.optional(v.array(v.string())),
-    })),
+        stopOnReply: v.boolean(),
+        stopKeywords: v.optional(v.array(v.string())),
+      }),
+    ),
     abuseControl: v.object({
       dmRateLimit: v.number(),
       deduplicateWindow: v.number(),
@@ -182,7 +193,6 @@ export default defineSchema({
     .index("by_account", ["accountId"])
     .index("by_account_status", ["accountId", "status"])
     .index("by_account_channel", ["accountId", "channel"]),
-
 
   /* ═══════════════════════════════════════════════════════════
      LEADS
@@ -216,14 +226,16 @@ export default defineSchema({
       v.literal("completed"),
     ),
     dripCurrentStep: v.number(),
-    collectedData: v.optional(v.object({
-      name: v.optional(v.string()),
-      city: v.optional(v.string()),
-      budget: v.optional(v.string()),
-      requirement: v.optional(v.string()),
-      timeline: v.optional(v.string()),
-      notes: v.optional(v.string()),
-    })),
+    collectedData: v.optional(
+      v.object({
+        name: v.optional(v.string()),
+        city: v.optional(v.string()),
+        budget: v.optional(v.string()),
+        requirement: v.optional(v.string()),
+        timeline: v.optional(v.string()),
+        notes: v.optional(v.string()),
+      }),
+    ),
     lastInboundAt: v.optional(v.number()),
     windowOpen: v.boolean(),
     triggerKeyword: v.string(),
@@ -241,7 +253,6 @@ export default defineSchema({
     .index("by_automation", ["automationId"])
     .index("by_ai_activity", ["aiSessionActive", "aiLastActivityAt"]),
 
-
   /* ═══════════════════════════════════════════════════════════
      CONVERSATIONS
   ═══════════════════════════════════════════════════════════ */
@@ -257,7 +268,12 @@ export default defineSchema({
     messageText: v.string(),
     mediaUrl: v.optional(v.string()),
     mediaType: v.optional(
-      v.union(v.literal("image"), v.literal("pdf"), v.literal("audio"), v.literal("none"))
+      v.union(
+        v.literal("image"),
+        v.literal("pdf"),
+        v.literal("audio"),
+        v.literal("none"),
+      ),
     ),
     deliveryStatus: v.union(
       v.literal("pending"),
@@ -286,7 +302,6 @@ export default defineSchema({
     .index("by_lead_sent", ["leadId", "sentAt"])
     .index("by_meta_message_id", ["metaMessageId"]),
 
-
   /* ═══════════════════════════════════════════════════════════
      DRIP JOBS
   ═══════════════════════════════════════════════════════════ */
@@ -299,7 +314,7 @@ export default defineSchema({
     message: v.string(),
     mediaUrl: v.optional(v.string()),
     mediaType: v.optional(
-      v.union(v.literal("image"), v.literal("pdf"), v.literal("none"))
+      v.union(v.literal("image"), v.literal("pdf"), v.literal("none")),
     ),
     convexJobId: v.optional(v.string()),
     status: v.union(
@@ -322,7 +337,6 @@ export default defineSchema({
     .index("by_account", ["accountId"])
     .index("by_scheduled", ["status", "scheduledFor"])
     .index("by_automation", ["automationId"]),
-
 
   /* ═══════════════════════════════════════════════════════════
      REFERRALS
@@ -349,7 +363,6 @@ export default defineSchema({
     .index("by_referrer_status", ["referrerAccountId", "status"])
     .index("by_code", ["referralCode"]),
 
-
   /* ═══════════════════════════════════════════════════════════
      WEBHOOK LOGS
   ═══════════════════════════════════════════════════════════ */
@@ -373,5 +386,4 @@ export default defineSchema({
     .index("by_account", ["accountId", "receivedAt"])
     .index("by_meta_message_id", ["metaMessageId"])
     .index("by_processed", ["processed", "receivedAt"]),
-
 });

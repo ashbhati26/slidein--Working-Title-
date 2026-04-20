@@ -8,16 +8,26 @@ import { Marquee } from "../_components/marquee";
 import { Counter } from "../_components/counter";
 
 const TICKER = [
-  "Fitness Coaches", "Course Creators", "Instagram Sellers",
-  "Real Estate Agents", "Salon Owners", "WhatsApp Businesses",
-  "Tutors", "Content Creators",
+  "Fitness Coaches",
+  "Course Creators",
+  "Instagram Sellers",
+  "Real Estate Agents",
+  "Salon Owners",
+  "WhatsApp Businesses",
+  "Tutors",
+  "Content Creators",
 ];
 
 const STATS = [
-  { n: 500,  suffix: "M+",    label: "WhatsApp users in India" },
-  { n: 999,  prefix: "₹",     suffix: "/mo", label: "Flat rate, unlimited contacts" },
-  { n: 2,    suffix: " min",  label: "Average setup time" },
-  { n: 6,    suffix: "",      label: "Indian languages supported" },
+  { n: 500, suffix: "M+", label: "WhatsApp users in India" },
+  {
+    n: 999,
+    prefix: "₹",
+    suffix: "/mo",
+    label: "Flat rate, unlimited contacts",
+  },
+  { n: 2, suffix: " min", label: "Average setup time" },
+  { n: 6, suffix: "", label: "Indian languages supported" },
 ];
 
 export function Hero() {
@@ -28,7 +38,7 @@ export function Hero() {
     if (!el) return;
     const t = setTimeout(() => {
       el.querySelectorAll<HTMLElement>(".clip-word").forEach((w) =>
-        w.classList.add("visible")
+        w.classList.add("visible"),
       );
     }, 100);
     return () => clearTimeout(t);
@@ -83,7 +93,7 @@ export function Hero() {
               onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
             >
-              Introducing SlideIN for WhatsApp
+              Introducing Svation for WhatsApp
               <ChevronRight size={14} />
             </a>
           </FadeIn>
@@ -98,8 +108,17 @@ export function Hero() {
               style={{ textAlign: "center", margin: 0 }}
             >
               {"Your DMs,".split(" ").map((w, i) => (
-                <span key={w + i} className="clip-wrap" style={{ marginRight: "0.22em" }}>
-                  <span className="clip-word" style={{ transitionDelay: `${i * 0.08}s` }}>{w}</span>
+                <span
+                  key={w + i}
+                  className="clip-wrap"
+                  style={{ marginRight: "0.22em" }}
+                >
+                  <span
+                    className="clip-word"
+                    style={{ transitionDelay: `${i * 0.08}s` }}
+                  >
+                    {w}
+                  </span>
                 </span>
               ))}
               <br />
@@ -129,8 +148,8 @@ export function Hero() {
                 textAlign: "center",
               }}
             >
-              SlideIN turns every Instagram comment and WhatsApp message
-              into a qualified lead — keyword triggers, Hinglish AI, drip sequences.
+              Svation turns every Instagram comment and WhatsApp message into a
+              qualified lead — keyword triggers, Hinglish AI, drip sequences.
               Setup in under 2 minutes.
             </p>
           </FadeUp>
@@ -145,24 +164,46 @@ export function Hero() {
                 gap: 16,
               }}
             >
-              <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                }}
+              >
                 <SignUpButton mode="modal">
-                  <button className="btn btn-primary" style={{ height: 44, padding: "0 24px", fontSize: 17, fontWeight: 400, borderRadius: 980 }}>
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      height: 44,
+                      padding: "0 24px",
+                      fontSize: 17,
+                      fontWeight: 400,
+                      borderRadius: 980,
+                    }}
+                  >
                     Get started
                   </button>
                 </SignUpButton>
                 <a
                   href="#how-it-works"
                   className="btn btn-ghost"
-                  style={{ height: 44, padding: "0 12px", fontSize: 17, display: "inline-flex", alignItems: "center", gap: 4, fontWeight: 400 }}
+                  style={{
+                    height: 44,
+                    padding: "0 12px",
+                    fontSize: 17,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                    fontWeight: 400,
+                  }}
                 >
                   Learn more <ChevronRight size={16} />
                 </a>
               </div>
-              <p
-                className="t-caption"
-                style={{ color: "var(--ink-3)" }}
-              >
+              <p className="t-caption" style={{ color: "var(--ink-3)" }}>
                 Free to start. No credit card required.
               </p>
             </div>
@@ -193,7 +234,10 @@ export function Hero() {
                 textAlign: "center",
               }}
             >
-              <div className="t-stat" style={{ marginBottom: 6, fontSize: "clamp(32px, 4vw, 52px)" }}>
+              <div
+                className="t-stat"
+                style={{ marginBottom: 6, fontSize: "clamp(32px, 4vw, 52px)" }}
+              >
                 <Counter
                   end={s.n}
                   prefix={s.prefix ?? ""}
@@ -201,7 +245,10 @@ export function Hero() {
                   duration={1400}
                 />
               </div>
-              <p className="t-body-sm" style={{ color: "var(--ink-3)", fontSize: 14 }}>
+              <p
+                className="t-body-sm"
+                style={{ color: "var(--ink-3)", fontSize: 14 }}
+              >
                 {s.label}
               </p>
             </FadeUp>

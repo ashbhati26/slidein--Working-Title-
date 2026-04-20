@@ -65,13 +65,29 @@ export function CTA() {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Join Indian creators and business owners who've replaced manual DM replies with SlideIN.
+                  Join Indian creators and business owners who've replaced
+                  manual DM replies with Svation.
                 </p>
               </FadeUp>
 
               <FadeUp delay="d-3">
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-                  <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 16,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 12,
+                      alignItems: "center",
+                      flexWrap: "wrap",
+                      justifyContent: "center",
+                    }}
+                  >
                     <SignUpButton mode="modal">
                       <button
                         style={{
@@ -91,8 +107,12 @@ export function CTA() {
                           alignItems: "center",
                           gap: 6,
                         }}
-                        onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.opacity = "0.88";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.opacity = "1";
+                        }}
                       >
                         Start for free
                       </button>
@@ -111,8 +131,12 @@ export function CTA() {
                         letterSpacing: "-0.01em",
                         transition: "color 0.15s ease",
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.color = "#ffffff")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.color = "rgba(255,255,255,0.6)")
+                      }
                     >
                       Learn more <ChevronRight size={16} />
                     </a>
