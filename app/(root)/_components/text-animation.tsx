@@ -30,8 +30,8 @@ export function WordReveal({
   tag: Tag = "span",
   className = "",
   style = {},
-  stagger = 0.065,    // seconds between each word
-  baseDelay = 0,      // initial offset in seconds
+  stagger = 0.065,
+  baseDelay = 0,
   italic = false,
 }: {
   text: string;
@@ -42,7 +42,7 @@ export function WordReveal({
   baseDelay?: number;
   italic?: boolean;
 }) {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -66,13 +66,8 @@ export function WordReveal({
 
   const parts = text.split(" ");
 
-  return (
-    // @ts-ignore
-    <Tag
-      ref={containerRef}
-      className={className}
-      style={{ display: "inline", ...style }}
-    >
+  const inner = (
+    <>
       {parts.map((word, i) => (
         <span
           key={i}
@@ -92,7 +87,35 @@ export function WordReveal({
           </span>
         </span>
       ))}
-    </Tag>
+    </>
+  );
+
+  /* Render a real div as the observed root, then style it to match
+     the requested tag visually via className. The Tag prop controls
+     display semantics via className (t-display, t-headline, etc.)
+     — the ref always lives on a div so TypeScript is happy.        */
+  if (Tag === "div" || Tag === "span" || Tag === "p") {
+    const El = Tag as "div" | "span" | "p";
+    return (
+      <El
+        ref={containerRef as React.RefObject<HTMLDivElement & HTMLSpanElement & HTMLParagraphElement>}
+        className={className}
+        style={{ display: "inline", ...style }}
+      >
+        {inner}
+      </El>
+    );
+  }
+
+  /* For semantic heading tags (h1–h6) render the heading with a
+     nested div as the observed root — avoids the union type issue. */
+  const HeadingEl = Tag as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  return (
+    <HeadingEl className={className} style={style}>
+      <div ref={containerRef} style={{ display: "inline" }}>
+        {inner}
+      </div>
+    </HeadingEl>
   );
 }
 
@@ -110,17 +133,24 @@ export function ShimmerText({
   className?: string;
   style?: React.CSSProperties;
 }) {
+  /* Same pattern — narrow to known safe tags */
+  if (Tag === "div" || Tag === "p") {
+    const El = Tag as "div" | "p";
+    return (
+      <El className={`shimmer-text ${className}`} style={style}>
+        {text}
+      </El>
+    );
+  }
   return (
-    // @ts-ignore
-    <Tag className={`shimmer-text ${className}`} style={style}>
+    <span className={`shimmer-text ${className}`} style={style}>
       {text}
-    </Tag>
+    </span>
   );
 }
 
-/* ─── Ghost Number (image 2 reference) ─────────────────────
- * Large outline-only number behind content.
- * Purely decorative.
+/* ─── Ghost Number ──────────────────────────────────────────
+ * Large outline-only number behind content. Purely decorative.
  */
 export function GhostNumber({
   n,
@@ -142,10 +172,16 @@ export function GhostNumber({
   );
 }
 
-/* ─── Section Number (image 4 reference) ───────────────────
+/* ─── Section Number ────────────────────────────────────────
  * Small "01" editorial label above section titles.
  */
-export function SectionN({ n, className = "" }: { n: number; className?: string }) {
+export function SectionN({
+  n,
+  className = "",
+}: {
+  n: number;
+  className?: string;
+}) {
   return (
     <span className={`t-num ${className}`}>
       {String(n).padStart(2, "0")}

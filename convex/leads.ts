@@ -2,9 +2,11 @@ import { v } from "convex/values";
 import {
   mutation,
   query,
+  action,
   internalMutation,
   internalQuery,
 } from "./_generated/server";
+import { internal } from "./_generated/api";
 import { DRIP_STOP_KEYWORDS, AI_SESSION_EXPIRY_MS } from "../lib/constants";
 
 
@@ -497,5 +499,98 @@ export const closeExpiredWindows = internalMutation({
     }
 
     return openLeads.length;
+  },
+});
+/* ═══════════════════════════════════════════════════════════
+   SEND MANUAL REPLY — owner types and sends from leads page
+   Works for both Instagram and WhatsApp.
+═══════════════════════════════════════════════════════════ */
+export const sendManualReply = action({
+  args: {
+    leadId:  v.id("leads"),
+    message: v.string(),
+  },
+  handler: async (ctx, { leadId, message }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    /* Load lead + account */
+    const lead = await ctx.runQuery(internal.leads.getLeadById, { leadId });
+    if (!lead) throw new Error("Lead not found");
+
+    const account = await ctx.runQuery(internal.accounts.getAccountById, {
+      accountId: lead.accountId,
+    });
+    if (!account) throw new Error("Account not found");
+
+    /* Ownership check */
+    if (account.clerkUserId !== identity.subject) throw new Error("Not authorized");
+
+    let metaMessageId: string | undefined;
+
+    /* ── Send via Instagram ── */
+    if (lead.channel === "instagram") {
+      const accessToken = account.instagram?.accessToken;
+      const igUserId    = account.instagram?.igUserId;
+      if (!accessToken || !igUserId) throw new Error("Instagram not connected");
+
+      const res = await fetch(
+        `https://graph.instagram.com/v25.0/${igUserId}/messages`,
+        {
+          method:  "POST",
+          headers: {
+            Authorization:  `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            recipient: { id: lead.senderId },
+            message:   { text: message },
+          }),
+        },
+      );
+      const data = await res.json() as { message_id?: string; error?: { message: string } };
+      if (!res.ok) throw new Error(data.error?.message ?? "Failed to send Instagram DM");
+      metaMessageId = data.message_id;
+    }
+
+    /* ── Send via WhatsApp ── */
+    if (lead.channel === "whatsapp") {
+      const accessToken   = account.whatsapp?.accessToken;
+      const phoneNumberId = account.whatsapp?.phoneNumberId;
+      if (!accessToken || !phoneNumberId) throw new Error("WhatsApp not connected");
+
+      const res = await fetch(
+        `https://graph.facebook.com/v21.0/${phoneNumberId}/messages`,
+        {
+          method:  "POST",
+          headers: {
+            Authorization:  `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            messaging_product: "whatsapp",
+            to:   lead.senderId,
+            type: "text",
+            text: { body: message, preview_url: false },
+          }),
+        },
+      );
+      const data = await res.json() as { messages?: Array<{ id: string }>; error?: { message: string } };
+      if (!res.ok) throw new Error(data.error?.message ?? "Failed to send WhatsApp message");
+      metaMessageId = data.messages?.[0]?.id;
+    }
+
+    /* Save to conversation history */
+    await ctx.runMutation(internal.leads.saveOutboundMessage, {
+      accountId:    lead.accountId,
+      leadId:       lead._id,
+      automationId: lead.automationId,
+      messageText:  message,
+      source:       "human",
+      metaMessageId,
+      insideWindow: lead.windowOpen,
+    });
+
+    return { success: true, metaMessageId };
   },
 });

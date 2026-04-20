@@ -4,9 +4,6 @@ const nextConfig: NextConfig = {
   /* ─── Turbopack (default in Next.js 16) ────────────── */
   /* Empty object silences the webpack/turbopack mismatch warning */
   turbopack: {},
-  typescript: {
-    ignoreBuildErrors: true, // ✅ skip TS errors
-  },
 
   /* ─── Package import optimisation ──────────────────── */
   /* Move out of experimental — stable in Next 16 */

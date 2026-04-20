@@ -11,7 +11,7 @@ interface InViewOptions {
 /** Hook: returns a ref. When element enters view, adds "visible" class. */
 export function useInView<T extends Element>(
   options: InViewOptions = {}
-): RefObject<T> {
+): RefObject<T | null> {
   const {
     threshold  = 0.1,
     rootMargin = "0px 0px -50px 0px",
@@ -60,14 +60,13 @@ export function FadeUp({
 }) {
   const ref = useInView<HTMLDivElement>();
   return (
-    <Tag
-      // @ts-ignore
+    <div
       ref={ref}
       className={`anim-fade-up ${delay} ${className}`}
       style={style}
     >
       {children}
-    </Tag>
+    </div>
   );
 }
 

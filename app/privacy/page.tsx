@@ -1,8 +1,10 @@
-export default function Privacy() {
-  return (
-    <div style={{ padding: 40 }}>
-      <h1>Privacy Policy</h1>
-      <p>This app is under development and does not misuse user data.</p>
-    </div>
-  );
+import { PrivacyContent } from "./_components/privacy-content";
+
+export const metadata = {
+  title: "Privacy Policy — SlideIN",
+  description: "How SlideIN collects, uses, and protects your data.",
+};
+
+export default function PrivacyPage() {
+  return <PrivacyContent />;
 }

@@ -15,6 +15,7 @@ import type * as drip from "../drip.js";
 import type * as http from "../http.js";
 import type * as instagram from "../instagram.js";
 import type * as leads from "../leads.js";
+import type * as webhooks from "../webhooks.js";
 
 import type {
   ApiFromModules,
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   instagram: typeof instagram;
   leads: typeof leads;
+  webhooks: typeof webhooks;
 }>;
 
 /**
