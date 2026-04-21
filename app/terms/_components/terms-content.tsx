@@ -156,10 +156,10 @@ export function TermsContent() {
           credentials. You are fully responsible for all activity that occurs
           under your account. Notify us immediately at{" "}
           <a
-            href="mailto:support@Svation.app"
+            href="mailto:support@Svation.com"
             style={{ color: "var(--accent)", textDecoration: "none" }}
           >
-            support@Svation.app
+            support@Svation.com
           </a>{" "}
           if you suspect unauthorised access.
         </P>
@@ -227,10 +227,10 @@ export function TermsContent() {
           7-day refund on your first payment if Svation does not work as
           described. After 7 days, all payments are non-refundable. Email{" "}
           <a
-            href="mailto:support@Svation.app"
+            href="mailto:support@Svation.com"
             style={{ color: "var(--accent)", textDecoration: "none" }}
           >
-            support@Svation.app
+            support@Svation.com
           </a>{" "}
           to request a refund.
         </P>
@@ -332,7 +332,7 @@ export function TermsContent() {
       <Section title="17. Contact">
         <Ul
           items={[
-            "Email: support@Svation.app",
+            "Email: support@Svation.com",
             "Company: Script Valley",
             "Country: India",
           ]}

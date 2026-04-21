@@ -25,7 +25,7 @@ export const WHATSAPP_VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN ?? "";
 export const INSTAGRAM_VERIFY_TOKEN = process.env.INSTAGRAM_VERIFY_TOKEN ?? "";
 
 /* ─── App ─────────────────────────────────────────────────── */
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://Svation.app";
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://Svation.com";
 export const IS_PRODUCTION = process.env.NODE_ENV === "production";
 export const IS_DEV = process.env.NODE_ENV === "development";
 

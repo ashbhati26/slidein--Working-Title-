@@ -13,7 +13,7 @@ import AuthModal from "./(root)/_components/AuthModal";
 /* ─── Metadata ─────────────────────────────────────────── */
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://Svation.app",
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://Svation.com",
   ),
   title: {
     default: "Svation — WhatsApp & Instagram Automation for India",
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://Svation.app",
+    url: "https://Svation.com",
     siteName: "Svation",
     title: "Svation — WhatsApp & Instagram Automation for India",
     description:

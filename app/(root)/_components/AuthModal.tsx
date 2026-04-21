@@ -1,13 +1,12 @@
 "use client";
 
+import { SignIn, SignUp } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useAuthModal } from "../../components/providers/AuthModalProvider";
-import SignInForm from "./SignInForm";
-import SignUpForm from "./SignUpForm";
 
 export default function AuthModal() {
-  const { isOpen, mode, close } = useAuthModal();
+  const { isOpen, mode, close, switchMode } = useAuthModal();
 
   return (
     <AnimatePresence>
@@ -21,9 +20,7 @@ export default function AuthModal() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 200,
+              position: "fixed", inset: 0, zIndex: 200,
               background: "rgba(0,0,0,0.5)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
@@ -39,122 +36,110 @@ export default function AuthModal() {
             exit={{ opacity: 0, scale: 0.97, y: 12 }}
             transition={{ duration: 0.18, ease: "easeOut" }}
             style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 201,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "fixed", inset: 0, zIndex: 201,
+              display: "flex", alignItems: "center", justifyContent: "center",
               padding: "0 16px",
               pointerEvents: "none",
             }}
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              style={{
-                width: "100%",
-                maxWidth: 400,
-                background: "var(--bg-card)",
-                border: "1px solid var(--rule)",
-                borderRadius: 20,
-                overflow: "hidden",
-                pointerEvents: "auto",
-              }}
+              style={{ pointerEvents: "auto", position: "relative" }}
             >
-              {/* Header */}
-              <div
+              {/* Close button */}
+              <button
+                onClick={close}
                 style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  justifyContent: "space-between",
-                  padding: "24px 28px 20px",
-                  borderBottom: "1px solid var(--rule)",
+                  position: "absolute", top: 12, right: 12, zIndex: 10,
+                  width: 28, height: 28, borderRadius: 999,
+                  border: "1px solid var(--rule-md)",
+                  background: "var(--bg)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "var(--ink-3)", cursor: "pointer",
+                  transition: "border-color 0.12s ease, color 0.12s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--ink-1)";
+                  e.currentTarget.style.color = "var(--ink-1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--rule-md)";
+                  e.currentTarget.style.color = "var(--ink-3)";
                 }}
               >
-                <div>
-                  {/* Brand */}
-                  <div style={{ marginBottom: 14 }}>
-                    <span
-                      style={{
-                        fontFamily: "var(--font-serif)",
-                        fontSize: 16,
-                        color: "var(--ink-1)",
-                        letterSpacing: "-0.025em",
-                      }}
-                    >
-                      Svation
-                    </span>
-                  </div>
-                  <h2
-                    style={{
-                      fontFamily: "var(--font-serif)",
-                      fontSize: 22,
-                      fontWeight: 400,
-                      color: "var(--ink-1)",
-                      letterSpacing: "-0.025em",
-                      marginBottom: 4,
-                    }}
-                  >
-                    {mode === "signIn" ? "Welcome back" : "Create your account"}
-                  </h2>
-                  <p
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 300,
-                      color: "var(--ink-3)",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {mode === "signIn"
-                      ? "Sign in to manage your automations."
-                      : "Start automating your DMs for free."}
-                  </p>
-                </div>
+                <X size={13} />
+              </button>
 
-                <button
-                  onClick={close}
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 999,
-                    border: "1px solid var(--rule-md)",
-                    background: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "var(--ink-3)",
-                    cursor: "pointer",
-                    flexShrink: 0,
-                    marginTop: 2,
-                    transition: "border-color 0.12s ease, color 0.12s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "var(--ink-1)";
-                    e.currentTarget.style.color = "var(--ink-1)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "var(--rule-md)";
-                    e.currentTarget.style.color = "var(--ink-3)";
-                  }}
+              {/* Clerk default components */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={mode}
+                  initial={{ opacity: 0, x: mode === "signIn" ? -10 : 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: mode === "signIn" ? 10 : -10 }}
+                  transition={{ duration: 0.14, ease: "easeOut" }}
                 >
-                  <X size={13} />
-                </button>
-              </div>
+                  {mode === "signIn" ? (
+                    <SignIn
+                      routing="hash"
+                      forceRedirectUrl="/dashboard"
+                      appearance={{
+                        elements: {
+                          rootBox: { width: "100%" },
+                          card: {
+                            boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+                            borderRadius: "20px",
+                            border: "1px solid var(--rule)",
+                          },
+                          footerAction: { display: "none" },
+                        },
+                      }}
+                    />
+                  ) : (
+                    <SignUp
+                      routing="hash"
+                      forceRedirectUrl="/dashboard"
+                      appearance={{
+                        elements: {
+                          rootBox: { width: "100%" },
+                          card: {
+                            boxShadow: "0 20px 60px rgba(0,0,0,0.15)",
+                            borderRadius: "20px",
+                            border: "1px solid var(--rule)",
+                          },
+                          footerAction: { display: "none" },
+                        },
+                      }}
+                    />
+                  )}
+                </motion.div>
+              </AnimatePresence>
 
-              {/* Form */}
-              <div style={{ padding: "24px 28px 28px" }}>
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={mode}
-                    initial={{ opacity: 0, x: mode === "signIn" ? -10 : 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: mode === "signIn" ? 10 : -10 }}
-                    transition={{ duration: 0.14, ease: "easeOut" }}
-                  >
-                    {mode === "signIn" ? <SignInForm /> : <SignUpForm />}
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+              {/* Switch mode */}
+              <p style={{
+                textAlign: "center", fontSize: 13,
+                color: "var(--ink-3)", marginTop: 12,
+              }}>
+                {mode === "signIn" ? (
+                  <>Don't have an account?{" "}
+                    <button
+                      onClick={switchMode}
+                      style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontSize: 13, fontWeight: 500, padding: 0 }}
+                    >
+                      Sign up free
+                    </button>
+                  </>
+                ) : (
+                  <>Already have an account?{" "}
+                    <button
+                      onClick={switchMode}
+                      style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontSize: 13, fontWeight: 500, padding: 0 }}
+                    >
+                      Sign in
+                    </button>
+                  </>
+                )}
+              </p>
             </div>
           </motion.div>
         </>

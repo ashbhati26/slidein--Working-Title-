@@ -82,7 +82,7 @@ export function BillingSection() {
       }
       const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
       if (!keyId) {
-        toast.error("Billing not configured. Contact support@Svation.app");
+        toast.error("Billing not configured. Contact support@Svation.com");
         return;
       }
       // @ts-expect-error — Razorpay loaded via script tag
@@ -127,7 +127,7 @@ export function BillingSection() {
       const data = (await res.json()) as { success?: boolean; error?: string };
       if (!res.ok || !data.success) {
         toast.error(
-          data.error ?? "Failed to cancel. Contact support@Svation.app",
+          data.error ?? "Failed to cancel. Contact support@Svation.com",
         );
         return;
       }

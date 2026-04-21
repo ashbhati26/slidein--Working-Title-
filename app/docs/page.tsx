@@ -247,7 +247,7 @@ export default function DocsPage() {
           <Step n={1} title="Create your account">
             Go to{" "}
             <a href="/" className="docs-link">
-              Svation.app
+              Svation.com
             </a>{" "}
             and click <strong>Get started free</strong>. Sign up with Google or
             your email. Email verification is required for email signups.

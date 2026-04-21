@@ -1,5 +1,5 @@
 export const APP_NAME = "Svation";
-export const APP_URL = "https://Svation.app";
+export const APP_URL = "https://Svation.com";
 export const SUPPORT_WHATSAPP = "https://wa.me/919999999999";
 
 /* ─── Plan pricing ────────────────────────────────────────── */

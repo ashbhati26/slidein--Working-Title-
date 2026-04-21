@@ -31,7 +31,7 @@ export default function ReferralPage() {
     typeof window !== "undefined" && data?.referralCode
       ? `${window.location.origin}/?ref=${data.referralCode}`
       : data?.referralCode
-        ? `https://Svation.app/?ref=${data.referralCode}`
+        ? `https://Svation.com/?ref=${data.referralCode}`
         : "";
 
   return (

@@ -49,10 +49,10 @@ export function CommissionBanner() {
         >
           You earn 30% of every referred user's monthly bill. Email{" "}
           <a
-            href="mailto:support@Svation.app"
+            href="mailto:support@Svation.com"
             style={{ color: "var(--accent)", textDecoration: "none" }}
           >
-            support@Svation.app
+            support@Svation.com
           </a>{" "}
           to set up your payout method.
         </p>

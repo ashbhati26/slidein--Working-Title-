@@ -258,10 +258,10 @@ export default function ChangelogPage() {
           </a>{" "}
           or email{" "}
           <a
-            href="mailto:support@Svation.app"
+            href="mailto:support@Svation.com"
             style={{ color: "var(--accent)", textDecoration: "none" }}
           >
-            support@Svation.app
+            support@Svation.com
           </a>
         </p>
       </div>

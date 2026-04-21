@@ -129,10 +129,10 @@ export function PrivacyContent() {
         <P>
           For privacy questions:{" "}
           <a
-            href="mailto:privacy@Svation.app"
+            href="mailto:privacy@Svation.com"
             style={{ color: "var(--accent)", textDecoration: "none" }}
           >
-            privacy@Svation.app
+            privacy@Svation.com
           </a>
         </P>
       </Section>
@@ -295,10 +295,10 @@ export function PrivacyContent() {
           You have the right to access, correct, delete, or export your data. To
           exercise any right, email{" "}
           <a
-            href="mailto:privacy@Svation.app"
+            href="mailto:privacy@Svation.com"
             style={{ color: "var(--accent)", textDecoration: "none" }}
           >
-            privacy@Svation.app
+            privacy@Svation.com
           </a>
           . We respond within 7 business days.
         </P>
@@ -311,10 +311,10 @@ export function PrivacyContent() {
           tokens in any client-side code or logs. To report a security
           vulnerability:{" "}
           <a
-            href="mailto:security@Svation.app"
+            href="mailto:security@Svation.com"
             style={{ color: "var(--accent)", textDecoration: "none" }}
           >
-            security@Svation.app
+            security@Svation.com
           </a>
         </P>
       </Section>
@@ -322,7 +322,7 @@ export function PrivacyContent() {
       <Section title="10. Children's privacy">
         <P>
           Svation is not intended for anyone under 18. If you believe a minor
-          has created an account, contact privacy@Svation.app and we will delete
+          has created an account, contact privacy@Svation.com and we will delete
           it promptly.
         </P>
       </Section>
@@ -338,7 +338,7 @@ export function PrivacyContent() {
       <Section title="12. Contact">
         <Ul
           items={[
-            "Email: privacy@Svation.app",
+            "Email: privacy@Svation.com",
             "Company: Script Valley",
             "Country: India",
           ]}

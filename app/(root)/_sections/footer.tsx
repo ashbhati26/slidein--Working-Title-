@@ -23,7 +23,7 @@ const LINKS: Record<
       href: "https://wa.me/919999999999",
       external: true,
     },
-    { label: "Email us", href: "mailto:support@Svation.app" },
+    { label: "Email us", href: "mailto:support@Svation.com" },
   ],
 };
 
