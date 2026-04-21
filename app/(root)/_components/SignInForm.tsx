@@ -9,7 +9,7 @@ import { useAuthModal } from "../../components/providers/AuthModalProvider";
 
 export default function SignInForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { signIn, isLoaded, setActive } = useSignIn() as any;
+  const { signIn, setActive } = useSignIn() as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const clerk = useClerk() as any;
   const { close, switchMode } = useAuthModal();
@@ -20,14 +20,13 @@ export default function SignInForm() {
   const [loading,    setLoading]    = useState(false);
   const [googleLoad, setGoogleLoad] = useState(false);
 
-  const busy = loading || googleLoad || !isLoaded;
+  const busy = loading || googleLoad;
 
   /* ── Google OAuth ── */
   async function handleGoogle() {
     setGoogleLoad(true);
     setErrors({});
     try {
-      /* clerk.client.signIn is always ready even before isLoaded */
       await clerk.client.signIn.authenticateWithRedirect({
         strategy:            "oauth_google",
         redirectUrl:         `${window.location.origin}/sso-callback`,
@@ -43,7 +42,6 @@ export default function SignInForm() {
   /* ── Email/password ── */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isLoaded || !signIn) return;
 
     const errs: Record<string, string> = {};
     if (!email.trim())    errs.email    = "Email is required";
@@ -78,7 +76,7 @@ export default function SignInForm() {
     <div>
       {errors.root && (
         <div style={{ padding: "8px 12px", borderRadius: 8, marginBottom: 14, background: "rgba(239,68,68,.07)", border: "1px solid rgba(239,68,68,.2)" }}>
-          <p style={{ fontSize: 12, color: "#f87171" }}>{errors.root}</p>
+          <p style={{ fontSize: 12, color: "#f87171", margin: 0 }}>{errors.root}</p>
         </div>
       )}
 
@@ -98,14 +96,20 @@ export default function SignInForm() {
           value={password} onChange={(e) => { setPassword(e.target.value); setErrors((p) => ({ ...p, password: "" })); }}
           error={errors.password} autoComplete="current-password" />
 
-        <button type="submit" disabled={busy} style={{
-          width: "100%", height: 40, borderRadius: 8, marginTop: 4,
-          background: "var(--accent)", color: "#fff", border: "none",
-          fontSize: 13, fontWeight: 500, fontFamily: "var(--font-sans)",
-          cursor: busy ? "not-allowed" : "pointer",
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-          opacity: busy ? 0.65 : 1, transition: "opacity 0.15s ease",
-        }}>
+        <button
+          type="submit"
+          disabled={busy}
+          style={{
+            width: "100%", height: 40, borderRadius: 8, marginTop: 4,
+            background: busy ? "var(--rule-md)" : "var(--accent)",
+            color: busy ? "var(--ink-3)" : "#fff",
+            border: "none", fontSize: 13, fontWeight: 500,
+            fontFamily: "var(--font-sans)",
+            cursor: busy ? "not-allowed" : "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+            transition: "all 0.15s ease",
+          }}
+        >
           {loading && <Loader2 size={14} style={{ animation: "spin .7s linear infinite" }} />}
           {loading ? "Signing in…" : "Sign in"}
         </button>

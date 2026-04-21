@@ -11,7 +11,7 @@ type Step = "form" | "verify";
 
 export default function SignUpForm() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { signUp, isLoaded, setActive } = useSignUp() as any;
+  const { signUp, setActive } = useSignUp() as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const clerk = useClerk() as any;
   const { close, switchMode } = useAuthModal();
@@ -26,7 +26,7 @@ export default function SignUpForm() {
   const [loading,    setLoading]   = useState(false);
   const [googleLoad, setGoogleLoad] = useState(false);
 
-  const busy = loading || googleLoad || !isLoaded;
+  const busy = loading || googleLoad;
 
   /* ── Google OAuth ── */
   async function handleGoogle() {
@@ -48,7 +48,6 @@ export default function SignUpForm() {
   /* ── Email signup ── */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isLoaded || !signUp) return;
 
     const errs: Record<string, string> = {};
     if (!firstName.trim())   errs.firstName = "First name is required";
@@ -60,7 +59,12 @@ export default function SignUpForm() {
     setErrors({});
 
     try {
-      await signUp.create({ firstName: firstName.trim(), lastName: lastName.trim() || undefined, emailAddress: email.trim(), password });
+      await signUp.create({
+        firstName:    firstName.trim(),
+        lastName:     lastName.trim() || undefined,
+        emailAddress: email.trim(),
+        password,
+      });
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setStep("verify");
     } catch (err: unknown) {
@@ -80,7 +84,6 @@ export default function SignUpForm() {
   /* ── Email verify ── */
   async function handleVerify(e: React.FormEvent) {
     e.preventDefault();
-    if (!isLoaded || !signUp) return;
     if (!code.trim()) { setErrors({ code: "Code is required" }); return; }
 
     setLoading(true);
@@ -96,18 +99,24 @@ export default function SignUpForm() {
     } catch (err: unknown) {
       const e       = err as { errors?: { code?: string; message?: string }[] };
       const errCode = e?.errors?.[0]?.code;
-      if (errCode === "form_code_incorrect") setErrors({ code: "Incorrect code — check your email" });
-      else if (errCode === "verification_expired") setErrors({ code: "Code expired — go back and try again" });
-      else setErrors({ root: e?.errors?.[0]?.message ?? "Verification failed. Please try again." });
+      if (errCode === "form_code_incorrect")
+        setErrors({ code: "Incorrect code — check your email" });
+      else if (errCode === "verification_expired")
+        setErrors({ code: "Code expired — go back and try again" });
+      else
+        setErrors({ root: e?.errors?.[0]?.message ?? "Verification failed. Please try again." });
     } finally {
       setLoading(false);
     }
   }
 
   async function handleResend() {
-    if (!isLoaded || !signUp) return;
-    try { await signUp.prepareEmailAddressVerification({ strategy: "email_code" }); setErrors({}); }
-    catch { setErrors({ root: "Could not resend code. Please try again." }); }
+    try {
+      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      setErrors({});
+    } catch {
+      setErrors({ root: "Could not resend code. Please try again." });
+    }
   }
 
   /* ── Verify step ── */
@@ -130,13 +139,13 @@ export default function SignUpForm() {
           <AuthInput label="Verification code" type="text" inputMode="numeric" placeholder="123456"
             value={code} onChange={(e) => { setCode(e.target.value); setErrors({}); }}
             error={errors.code} autoComplete="one-time-code" autoFocus maxLength={6} />
-          <button type="submit" disabled={loading || !isLoaded} style={{
+          <button type="submit" disabled={loading} style={{
             width: "100%", height: 40, borderRadius: 8, marginTop: 4,
-            background: "var(--accent)", color: "#fff", border: "none",
-            fontSize: 13, fontWeight: 500, fontFamily: "var(--font-sans)",
+            background: loading ? "var(--rule-md)" : "var(--accent)",
+            color: loading ? "var(--ink-3)" : "#fff",
+            border: "none", fontSize: 13, fontWeight: 500, fontFamily: "var(--font-sans)",
             cursor: loading ? "not-allowed" : "pointer",
             display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-            opacity: loading ? 0.65 : 1,
           }}>
             {loading && <Loader2 size={14} style={{ animation: "spin .7s linear infinite" }} />}
             {loading ? "Verifying…" : "Verify email"}
@@ -144,7 +153,9 @@ export default function SignUpForm() {
         </form>
         <p style={{ textAlign: "center", fontSize: 12, color: "var(--ink-3)", marginTop: 16 }}>
           Didn't receive it?{" "}
-          <button onClick={handleResend} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontSize: 12, fontWeight: 500, padding: 0 }}>Resend code</button>
+          <button onClick={handleResend} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontSize: 12, fontWeight: 500, padding: 0 }}>
+            Resend code
+          </button>
         </p>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -185,11 +196,12 @@ export default function SignUpForm() {
 
         <button type="submit" disabled={busy} style={{
           width: "100%", height: 40, borderRadius: 8, marginTop: 4,
-          background: "var(--accent)", color: "#fff", border: "none",
-          fontSize: 13, fontWeight: 500, fontFamily: "var(--font-sans)",
+          background: busy ? "var(--rule-md)" : "var(--accent)",
+          color: busy ? "var(--ink-3)" : "#fff",
+          border: "none", fontSize: 13, fontWeight: 500, fontFamily: "var(--font-sans)",
           cursor: busy ? "not-allowed" : "pointer",
           display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-          opacity: busy ? 0.65 : 1,
+          transition: "all 0.15s ease",
         }}>
           {loading && <Loader2 size={14} style={{ animation: "spin .7s linear infinite" }} />}
           {loading ? "Creating account…" : "Create account"}
@@ -204,7 +216,9 @@ export default function SignUpForm() {
 
       <p style={{ textAlign: "center", fontSize: 12, color: "var(--ink-3)", marginTop: 14 }}>
         Already have an account?{" "}
-        <button onClick={switchMode} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontSize: 12, fontWeight: 500, padding: 0 }}>Sign in</button>
+        <button onClick={switchMode} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--accent)", fontSize: 12, fontWeight: 500, padding: 0 }}>
+          Sign in
+        </button>
       </p>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>

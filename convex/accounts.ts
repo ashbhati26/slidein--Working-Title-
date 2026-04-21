@@ -370,6 +370,50 @@ export const updatePlan = internalMutation({
   },
 });
 
+export const saveSubscriptionId = mutation({
+  args: {
+    clerkUserId:            v.string(),
+    razorpaySubscriptionId: v.string(),
+    plan:                   v.union(v.literal("creator"), v.literal("smart_ai")),
+  },
+  handler: async (ctx, { clerkUserId, razorpaySubscriptionId, plan }) => {
+    const account = await ctx.db
+      .query("accounts")
+      .withIndex("by_clerk_user", (q) => q.eq("clerkUserId", clerkUserId))
+      .unique();
+    if (!account) return;
+    await ctx.db.patch(account._id, {
+      razorpaySubscriptionId,
+      plan,
+      subscriptionStatus: "active",
+      updatedAt: Date.now(),
+    });
+  },
+});
+
+export const getAccountBySubscriptionId = internalQuery({
+  args: { razorpaySubscriptionId: v.string() },
+  handler: async (ctx, { razorpaySubscriptionId }) => {
+    const all = await ctx.db.query("accounts").collect();
+    return all.find((a) => a.razorpaySubscriptionId === razorpaySubscriptionId) ?? null;
+  },
+});
+
+export const markSubscriptionCancelled = mutation({
+  args: { clerkUserId: v.string() },
+  handler: async (ctx, { clerkUserId }) => {
+    const account = await ctx.db
+      .query("accounts")
+      .withIndex("by_clerk_user", (q) => q.eq("clerkUserId", clerkUserId))
+      .unique();
+    if (!account) return;
+    await ctx.db.patch(account._id, {
+      subscriptionStatus: "cancelled",
+      updatedAt: Date.now(),
+    });
+  },
+});
+
 export const incrementLeadCount = internalMutation({
   args: { accountId: v.id("accounts") },
   handler: async (ctx, { accountId }) => {

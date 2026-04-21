@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "@/convex/_generated/api";
 
 const RAZORPAY_KEY_ID     = process.env.RAZORPAY_KEY_ID     ?? "";
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET ?? "";
+
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export async function POST(req: NextRequest) {
   try {
@@ -41,6 +46,14 @@ export async function POST(req: NextRequest) {
         { error: data.error?.description ?? "Failed to cancel subscription" },
         { status: 500 }
       );
+    }
+
+    // Update Convex immediately so UI reflects cancellation
+    const { userId } = await auth();
+    if (userId) {
+      await convex.mutation(api.accounts.markSubscriptionCancelled, {
+        clerkUserId: userId,
+      });
     }
 
     return NextResponse.json({ success: true, status: data.status });

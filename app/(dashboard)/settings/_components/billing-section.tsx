@@ -97,10 +97,16 @@ export function BillingSection() {
         prefill: { name: account?.name ?? "", email: account?.email ?? "" },
         theme: { color: "#0071e3" },
         modal: { ondismiss: () => setUpgrading(null) },
-        handler: () => {
-          toast.success("Payment successful! Plan updates in a few seconds.");
-          setUpgrading(null);
-        },
+        handler: async () => {
+  // Save subscriptionId to the account immediately on payment success
+  await fetch("/api/billing/confirm-subscription", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ subscriptionId: data.subscriptionId, planId }),
+  });
+  toast.success("Payment successful! Plan updates in a few seconds.");
+  setUpgrading(null);
+},
       }) as { open: () => void };
       rzp.open();
     } catch {

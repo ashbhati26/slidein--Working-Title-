@@ -652,7 +652,14 @@ http.route({
     const isCancelled  = event.event === "subscription.cancelled"  || event.event === "subscription.completed";
 
     if (isActivation || isCancelled) {
-      const sub     = event.payload.subscription.entity;
+      const sub = event.payload.subscription.entity;
+
+      // customer_id is null in test mode — skip that lookup
+      if (!sub.customer_id) {
+        console.warn("[Razorpay] No customer_id — skipping");
+        return new Response("OK", { status: 200 });
+      }
+
       const account = await ctx.runQuery(internal.accounts.getAccountByRazorpayCustomer, {
         razorpayCustomerId: sub.customer_id,
       });
